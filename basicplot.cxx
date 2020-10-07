@@ -37,14 +37,6 @@ int plot() {
         hist->SetDirectory(0);
         hist->Draw("same");
         break;
-        
-	RooRealVar m("m", "D0 mass", 1850, 1900);
-        RooRealVar mean("mean", "mean DO mass", 1875, "MeV");
-	RooRealVar sigma("sigma", "D0 mass width", 50, "MeV");
-	RooGaussian model("model", "signal pdf", m, mean, sigma);
-	RooPlot* mframe = m.frame();
-	model.plotOn(mframe);
-	mframe->Draw();
       }
     }
   }
