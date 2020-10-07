@@ -1,4 +1,4 @@
-int plot() {
+int basicplot() {
   gStyle->SetOptStat(0);
   TCanvas* c = new TCanvas("c","plot.cxx canvas");
   c->SetTickx(); c->SetTicky();
@@ -14,6 +14,7 @@ int plot() {
   TFile* file = new TFile(filename.c_str());
   
   TH1D* hist = new TH1D;
+  TH2D* hist2d = new TH2D;
   while(hist->GetEntries() == 0){
     TIter next(gDirectory->GetListOfKeys());
     TKey* key;
@@ -25,17 +26,25 @@ int plot() {
 
     std::cout << "open / draw... ";
     std::string choice; std::cin >> choice;
+    if(choice == "..") {
+      gDirectory->cd("..");
+    }
     
     next.Reset();
     while((key = (TKey*)next())) {
       if(key->ReadObj()->GetName() == choice) {
         if(gROOT->GetClass(key->GetClassName())->InheritsFrom("TDirectory")) {
           gDirectory->cd(choice.c_str());
-            break;
-        }
-	hist = (TH1D*)key->ReadObj();
-        hist->SetDirectory(0);
-        hist->Draw("same");
+          //break;
+        } else if(gROOT->GetClass(key->GetClassName())->InheritsFrom("TH1D")) {
+	  hist = (TH1D*)key->ReadObj();
+          hist->SetDirectory(0);
+          hist->Draw();
+	} else if(gROOT->GetClass(key->GetClassName())->InheritsFrom("TH2D")) {
+	  hist2d = (TH2D*)key->ReadObj();
+          hist2d->SetDirectory(0);
+          hist2d->Draw();
+	}
         break;
       }
     }
