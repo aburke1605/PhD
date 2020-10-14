@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- Edited By PoolXMLCatalog.py -->
+<!DOCTYPE POOLFILECATALOG SYSTEM "InMemory">
+<POOLFILECATALOG>
+
+<File ID="1C894F09-400F-E811-AB2D-FA163E713D07">
+   <physical>
+      <pfn filetype="ROOT_All" name="root://x509up_u129262@eoslhcb.cern.ch//eos/lhcb/grid/prod/lhcb/MC/2016/ALLSTREAMS.DST/00070793/0000/00070793_00000565_7.AllStreams.dst" se="CERN_MC-DST-EOS"/>
+      <pfn filetype="ROOT_All" name="root://grid05.lal.in2p3.fr:1094//dpm/lal.in2p3.fr/home/lhcb/MC/2016/ALLSTREAMS.DST/00070793/0000/00070793_00000565_7.AllStreams.dst" se="LAL_MC-DST"/>
+   </physical>
+   <logical>
+      <lfn name="/lhcb/MC/2016/ALLSTREAMS.DST/00070793/0000/00070793_00000565_7.AllStreams.dst"/>
+   </logical>
+</File>
+
+</POOLFILECATALOG>

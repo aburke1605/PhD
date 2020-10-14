@@ -1,5 +1,5 @@
 #define DecayTree_cxx
-#include "practice.h"
+#include "K3pi.h"
 #include <TH2.h>
 #include <TStyle.h>
 #include <TCanvas.h>
@@ -45,38 +45,50 @@ void DecayTree::Loop()
       
       // PIDs ( Hi_ID for iE[1,4] ):
       // pi+ = 211, pi- = -211, K+ = 321, K- = -321
-      
-      double D0_px = H1_PX + H2_PX + H3_PX + H4_PX;
-      double D0_py = H1_PY + H2_PY + H3_PY + H4_PY;
-      double D0_pz = H1_PZ + H2_PZ + H3_PZ + H4_PZ;
-      double D0_pp = pow(D0_px, 2) + pow(D0_py, 2) + pow(D0_pz, 2);
-      double TOT_pe = H1_PE + H2_PE + H3_PE + H4_PE;
-      double D0_m = sqrt( pow(TOT_pe, 2) - D0_pp );
-      h_D0_m->Fill(D0_m);
+      int TOT_ID = H1_ID + H2_ID + H3_ID + H4_ID; // +/-110
 
-      double Dst_px = D0_px + piSoft_PX;
-      double Dst_py = D0_py + piSoft_PY;
-      double Dst_pz = D0_pz + piSoft_PZ;
-      double Dst_pp = pow(Dst_px, 2) + pow(Dst_py, 2) + pow(Dst_pz, 2);
-      TOT_pe = piSoft_PE + sqrt(D0_pp + pow(D0_m, 2));
-      double Dst_m = sqrt( pow(TOT_pe, 2) - Dst_pp );
-      h_delta_m->Fill((Dst_m - D0_m)/1000);
+      if(TOT_ID == 110 || TOT_ID == -110) {
+        double D0_px = H1_PX + H2_PX + H3_PX + H4_PX;
+        double D0_py = H1_PY + H2_PY + H3_PY + H4_PY;
+        double D0_pz = H1_PZ + H2_PZ + H3_PZ + H4_PZ;
+        double D0_pp = pow(D0_px, 2) + pow(D0_py, 2) + pow(D0_pz, 2);
+        double TOT_pe = H1_PE + H2_PE + H3_PE + H4_PE;
+        double D0_m = sqrt( pow(TOT_pe, 2) - D0_pp );
+        h_D0_m->Fill(D0_m);
+      
+        if(piSoft_ID + TOT_ID == 101 || piSoft_ID + TOT_ID == -101) {
+          double Dst_px = D0_px + piSoft_PX;
+          double Dst_py = D0_py + piSoft_PY;
+          double Dst_pz = D0_pz + piSoft_PZ;
+          double Dst_pp = pow(Dst_px, 2) + pow(Dst_py, 2) + pow(Dst_pz, 2);
+          TOT_pe = piSoft_PE + sqrt(D0_pp + pow(D0_m, 2));
+          double Dst_m = sqrt( pow(TOT_pe, 2) - Dst_pp );
+          h_delta_m->Fill((Dst_m - D0_m)/1000);
+	} else { // redundant
+	  std::cout << "Soft pion not matched: " << piSoft_ID + TOT_ID  << std::endl;
+	}
+      } else { // redundant
+        std::cout << "H's not matched: " << TOT_ID << std::endl;
+      }
    }
    
    TFile output("test.root","RECREATE");
    output.cd();
    h_D0_m->Write();
    h_delta_m->Write();
+   output.Close();
+   
+   /*
    TDirectory* dir = output.mkdir("my_dir");
    dir->cd();
    h_D0_m->Write();
    TDirectory* dir2 = dir->mkdir("my_other_dir");
    dir2->cd();
    h_delta_m->Write();
-   output.Close();
+   */
 }
 
-int practice() {
+int K3pi() {
   DecayTree t;
   t.Loop();
   
