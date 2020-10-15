@@ -38,6 +38,39 @@ All tuple tools start with DecayTreeTuple here:  https://gitlab.cern.ch/lhcb/Ana
       DecayTreeTupleTrigger    for accessing to the trigger information of the candidates.
 All info in src/.h files or in coresponding doxygen
 '''
+     
+# Add LoKi HybridTools
+dstar_hybrid = dtt.Dstar.addTupleTool('LoKi::Hybrid::TupleTool/LoKi_Dstar')
+d0_hybrid = dtt.D0.addTupleTool('LoKi::Hybrid::TupleTool/LoKi_D0')
+pisoft_hybrid = dtt.pisoft.addTupleTool('LoKi::Hybrid::TupleTool/LoKi_PiSoft')
+
+preamble = ['DZ = VFASPF(VZ) - BPV(VZ)',
+            'TRACK_MAX_PT = MAXTREE(ISBASIC & HASTRACK, PT, -1)']
+dstar_hybrid.Preambulo = preamble
+d0_hybrid.Preambulo = preamble
+
+dstar_hybrid.Variables = {
+  'mass': 'M',
+  'mass_D0': 'CHILD(M, 1)',
+  'pt': 'PT',
+  'dz': 'DZ',
+  'dira': 'BPVDIRA',
+  'max_pt': 'MAXTREE(ISBASIC & HASTRACK, PT, -1)',
+  'max_pt_preambulo': 'TRACK_MAX_PT',
+  'n_highpt_tracks': 'NINTREE(ISBASIC & HASTRACK & (PT > 1500*MeV))'
+}
+d0_hybrid.Variables = {
+  'mass': 'M',
+  'pt': 'PT',
+  'dira': 'BPVDIRA',
+  'vtx_chi2': 'VFASPF(VCHI2)',
+  'dz': 'DZ'
+}
+pisoft_hybrid.Variables = {
+  'p': 'P',
+  'pt': 'PT'
+}
+
 
 from Configurables import DaVinci
 from PhysConf.Filters import LoKi_Filters
