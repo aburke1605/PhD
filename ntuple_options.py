@@ -10,6 +10,7 @@ dtt = DecayTreeTuple('TupleDstToD0pi_D0ToKK')
 dtt.Inputs = ['/Event/{0}/Phys/{1}/Particles'.format(stream, line)] #Phys/{0}/Particles'.format(line)] # for microDST
 #dtt.Decay = '[D*(2010)+ -> (D0 -> K- K+) pi+]CC' # written like this means tuple tools only runs on the D*(2010)+, to select particles to store information on mark them with a ^, e.g.:
 dtt.Decay = '[D*(2010)+ -> ^(D0 -> ^K- ^K+) ^pi+]CC' # but this not ideal as we may only want to run some tools on D and some on children, use Branches below
+                                               # CC means "and also equivalent C conjugated decay" ?
 # Additional tuple tools:
 track_tool = dtt.addTupleTool('TupleToolTrackInfo')
 # Only need to store a tool in a variable if you want to configure it:
@@ -69,6 +70,23 @@ d0_hybrid.Variables = {
 pisoft_hybrid.Variables = {
   'p': 'P',
   'pt': 'PT'
+}
+
+
+dtt.Dstar.addTupleTool('TupleToolDecayTreeFitter/ConsD')
+dtt.Dstar.ConsD.constrainToOriginVertex = True
+dtt.Dstar.ConsD.Verbose = True
+dtt.Dstar.ConsD.daughtersToConstrain = ['D0'] # constrain D0 to have originated from the primary vertex (prompt D* decay)
+dtt.Dstar.ConsD.UpdateDaughters = True
+
+
+dtt.Dstar.addTupleTool('TupleToolDecayTreeFitter/ConsDKpi')
+dtt.Dstar.ConsDKpi.constrainToOriginVertex = True
+dtt.Dstar.ConsDKpi.Verbose = True
+dtt.Dstar.ConsDKpi.daughtersToConstrain = ['D0']
+dtt.Dstar.ConsDKpi.Substitutions = { # mark particle in key to substitute with ^, substitute with value
+  'Charm -> (D0 -> K- ^K+) Meson': 'pi+', # generalised: D*(2010)->Charm, pisoft->Meson
+  'Charm -> (D~0 -> K+ ^K-) Meson': 'pi-'
 }
 
 
