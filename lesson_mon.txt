@@ -1,0 +1,113 @@
+# This is to save notes.
+# On lxplus737
+
+#####
+bash:
+#####
+tree .
+
+# man not working?
+
+rmdir thesis/
+
+cat test1.txt text2.txt
+
+# use \ infront of command to use without alias, e.g. \ls without --color=auto
+
+head text.txt #top 10 lines (short version of less) , opposite is tail
+head text.txt -n 3 #top3 lines
+
+wc *.txt  #wordcount
+#lines #words #characters
+
+sort text.txt
+sort -n lengths.txt
+
+# this is a lot of effort:
+	wc *.pdb > lengths.txt
+	sort -n lengths.txt > sorted_lengths.txt
+	head -n 1 sorted_lengths.txt
+# instead use pipeline:
+	wc *.pdb | sort -n | head -n 1
+# output of wc *.pdb redirected to input of sort -n --> more efficient
+
+sort -n < lengths.txt # use < if sort command doesn't take files as input by default (sort does, but this is just an example)
+
+# use | tee instead of > to see what is going on as output is logged to a file:
+	wc *.pdb -l | tee lengths.txt
+
+ls *NENE0?7*[AB].txt is either *NENEA0_7____A.txt or *NENE0_7___B.txt
+
+cp *.dat original-*.dat # does not work as bash thinks original-*.dat is a directory, which does not exist
+# instead:
+	$ for filename in *.dat:
+	> do
+	> cp $filename original-$filename #use "$filename" to deal with filenames with spaces
+	> done
+	$ ls
+	# > is command continuation which wont finish until you enter done (ie its not $)
+
+# use 'touch' command to create empty files or to update a file without changing it(eg change timestamp)
+
+history | tail -n 5
+!1199 # repeats command 1199
+
+fc #fixed command - edit for loop in editor, or press CTRL-X CTRL-E
+
+# in a .sh sript, "$1" is the first argument in a bash command, eg:
+	bash middle.sh pentane.pdb 
+	echo "$1" # prints pentane.pdb
+# bash runs script in another shell, source in current shell (bash usually better so that nothing unexpected happens in current shell), use ./middle.sh with chmod +x middle.sh
+
+grep -E '^.o' haiku.txt -n
+grep -E '^[YT]o' haiku.txt -n
+
+find .
+find . -type d
+find . -name *.txt
+find . -name '*.txt'
+
+screen # creates new screen?
+# if you get disconnected, then sign back in and do:
+screen -list
+#.....missed this, some sort of restore?
+CRTL-A CRTL-D # detach manually
+
+klist # kerberos ticket
+# what if ticket expires before command? renew:
+kinit -R
+# or
+krenew
+
+cern-get-keytab --keytab private/mykeytab.kt --user --login aburke
+
+phonebook aburke
+phonebook Burke -t email
+
+
+
+
+
+####
+git:
+####
+git init # make . a repository
+ls -a # shows new .git/ directory
+# if create another git repository in an existing one, use:
+rm -rf .git/
+git log
+# try to split up changes into many different commits
+# after git add but before git commit, use:
+git diff --staged # to show what is staged to change
+git diff HEAD~1 mars.txt # show difference cf 1 commit ago
+git show # more info than git diff
+git checkout HEAD mars.txt # restores mars.txt to most recent commit, or hexadecimal number for that specific commit (shown in git log)
+git checkout -f master mars.txt # restores is to master branch?
+git stash # saves work you don't want to commit (may not yet be working?)
+# add things to .gitignore file that you dont want to show up in git status (ie files you are not going to track), to see what is ignored:
+git status --ignored
+# e.g.:
+	*.dat # ignore anything ending in .dat
+	!final.dat # except this one
+git remote add origin ssh://git@gitlab.cern.ch:___.git # links to gitlab repo
+git remote -v
